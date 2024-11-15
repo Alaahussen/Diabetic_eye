@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetic Eye Classification</title>
+
+    <!-- AOS Library for scroll animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <style>
+        /* Reset styles */
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Background image only (no gradient, black/blue theme) */
+        body {
+            /* Ensure correct relative path to the image */
+            /*background: url('static/images/images.jfif') no-repeat center center fixed;  /* Use correct relative path */
+            background-size: cover; /* Ensures the image covers the entire screen */
+            background-color: #00796b;  /* Set background color to black in case image is missing */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Container styling */
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9); /* Slight transparency for readability */
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #00796b; /* Teal color */
+            margin-bottom: 20px;
+        }
+
+        /* Form and Button Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            background-color: #b2dfdb;
+            border: 1px solid #00796b;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Image Preview */
+        .preview {
+            margin-top: 15px;
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Classify Button Animation */
+        #classify-btn {
+            padding: 10px;
+            background-color: #00796b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #classify-btn:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+        }
+
+        /* Prediction Result Animation */
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0f2f1;
+            border: 1px solid #80cbc4;
+            border-radius: 8px;
+            font-size: 18px;
+            color: #333;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+
+    <!-- JavaScript for Image Preview and AOS initialization -->
+    <script>
+        function previewImage() {
+            const fileInput = document.getElementById("file-input");
+            const preview = document.getElementById("preview");
+
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Initialize AOS library for animations
+        document.addEventListener("DOMContentLoaded", function() {
+            AOS.init({
+                duration: 1000, // Animation duration in ms
+                once: true      // Only animate once
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container" data-aos="fade-up">
+        <h1>Diabetic Eye Disease Classification</h1>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" id="file-input" name="file" accept="image/*" onchange="previewImage()" required>
+            <img id="preview" class="preview" src="#" alt="Image Preview" style="display: none;">
+            <button type="submit" id="classify-btn">Classify</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result" data-aos="fade-up">
+            <strong>Prediction:</strong> {{ prediction }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
